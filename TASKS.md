@@ -27,7 +27,7 @@ Suggested order: **warm-ups → backend → frontend → cross-stack → stretch
 
 ## Backend (~30–60 min each)
 
-### 4. Fix the N+1 query in the task list endpoint
+### 4. Fix the N+1 query in the task list endpoint - done
 - **Where:** `backend/tasks/views.py` → `TaskViewSet.get_queryset`
 - **Symptom:** The serializer reads `category.name` and `category.color` for each task. With many tasks, this issues one extra query per task.
 - **What:** Use `select_related("category")` so the join happens once.
