@@ -28,6 +28,8 @@ class TaskViewSet(viewsets.ModelViewSet):
         if category_id:
             qs = qs.filter(category_id=category_id)
 
+        return qs
+
     @action(detail=True, methods=["post"])
     def toggle(self, request, pk=None):
         task = self.get_object()

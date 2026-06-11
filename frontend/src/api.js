@@ -13,15 +13,13 @@ async function request(path, options = {}) {
 }
 
 export const api = {
-  listTasks: (categoryId, limit, offset) => {
+  listTasks: (categoryId, offset) => {
     const params = new URLSearchParams();
     if (categoryId){
       params.set('category', categoryId)
     }
-    if (limit != null){
-      params.set('limit', limit)
-    }
-    if (offset != null){
+      params.set('limit', 20)
+    if (offset){
       params.set('offset', offset)
     }
     const qs = params.toString();

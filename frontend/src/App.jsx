@@ -4,6 +4,13 @@ import TaskList from "./components/TaskList.jsx";
 import TaskForm from "./components/TaskForm.jsx";
 import CategorySidebar from "./components/CategorySidebar.jsx";
 
+function getOffset(url){
+  if (!url){
+    return null
+  }
+  return new URL(url, window.location.origin).searchParams.get("offset")
+}
+
 export default function App() {
   const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -12,7 +19,8 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [page, setPage] = useState({ next: null, previous: null, count: 0 });
+  const [page, setPage] = useState({ next: null, previous: null, count: 0 , offset: 0});
+
 
   async function loadAll() {
     try {
@@ -58,22 +66,20 @@ export default function App() {
     await loadAll();
   }
 
-  async function handleNext() {
-
-    const t = await api.listTasks(activeCategory, 20, 20)
-    setTasks(t.results);
-    setPage({next: t.next, previous: t.previous, count: t.count})
-  }
-  // async function handlePrevious() {
-  //   await api.deleteTask(task.id);
-  //   await loadAll();
-  // }
-
   async function handleDeleteAll() {
     if (!confirm(`Delete all completed task?`)) return;
     await Promise.all(tasks.filter(task => task.completed).map(task => api.deleteTask(task.id)))
     await loadAll();
   }
+
+  async function goTo(url){
+    if(!url) return;
+    const offset = getOffset(url)
+    const response = await api.listTasks(activeCategory, offset)
+    setTasks(response.results)
+    setPage({next:response.next, previous: response.previous, count: response.count})
+  }
+
   return (
     <div className="app">
       <header className="header">
@@ -114,7 +120,7 @@ export default function App() {
           )}
           <div>
             <button onClick={() => goTo(page.previous)}>&laquo;</button>
-            <button onClick={() => handleNext()}>&raquo;</button>
+            <button onClick={() => goTo(page.next)}>&raquo;</button>
           </div>
         </main>
       </div>
