@@ -33,7 +33,7 @@ Suggested order: **warm-ups → backend → frontend → cross-stack → stretch
 - **What:** Use `select_related("category")` so the join happens once.
 - **Done when:** Use Django Debug Toolbar, `django.db.connection.queries`, or a logging trick to confirm the list endpoint runs a constant number of queries regardless of task count. Write a quick comment in your PR description showing before/after query counts.
 
-### 5. Add pagination to the tasks endpoint
+### 5. Add pagination to the tasks endpoint - done
 - **Where:** `backend/config/settings.py` (`REST_FRAMEWORK`), `backend/tasks/views.py`, `frontend/src/api.js`, `frontend/src/App.jsx`
 - **What:** Switch the tasks endpoint to use DRF's `PageNumberPagination` with `PAGE_SIZE = 20`. Update the React app to:
   - Read `results`, `next`, `previous`, `count` from the response.
